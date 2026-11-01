@@ -1,11 +1,14 @@
+"use client";
+
+import { useActionState } from "react";
+import { gantiPasswordAdmin } from "@/app/admin/actions";
 import NavAdmin from "@/components/NavAdmin";
 import Input from "@/components/Input";
 import Tombol from "@/components/Tombol";
-import CatatanBelumAktif from "@/components/CatatanBelumAktif";
 
-// US-05: form ganti password belum berfungsi.
-// Tugas peserta: admin yang sudah login bisa mengganti password-nya, diproses di server.
 export default function HalamanGantiPassword() {
+  const [state, formAction, sedangMemproses] = useActionState(gantiPasswordAdmin, null);
+
   return (
     <div className="flex flex-col gap-6 py-8">
       <NavAdmin />
@@ -15,7 +18,23 @@ export default function HalamanGantiPassword() {
           Ganti password bawaan segera setelah pertama kali masuk. Minimal 8 karakter.
         </p>
       </div>
-      <form className="flex max-w-sm flex-col gap-4">
+      {state?.error && (
+        <p
+          role="alert"
+          className="max-w-sm rounded-lg border border-bahaya bg-permukaan px-3 py-2 text-sm text-bahaya"
+        >
+          {state.error}
+        </p>
+      )}
+      {state?.sukses && (
+        <p
+          role="status"
+          className="max-w-sm rounded-lg border border-utama bg-permukaan px-3 py-2 text-sm font-semibold text-utama"
+        >
+          {state.sukses}
+        </p>
+      )}
+      <form action={formAction} className="flex max-w-sm flex-col gap-4">
         <Input
           label="Password baru"
           name="password_baru"
@@ -32,11 +51,10 @@ export default function HalamanGantiPassword() {
           minLength={8}
           required
         />
-        <Tombol type="submit" className="self-start">
+        <Tombol type="submit" className="self-start" disabled={sedangMemproses}>
           Simpan password
         </Tombol>
       </form>
-      <CatatanBelumAktif>Ganti password belum berfungsi: lihat US-05.</CatatanBelumAktif>
     </div>
   );
 }
