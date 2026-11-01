@@ -40,3 +40,25 @@ AI mengubah app/produk/\[id]/page.jsx menjadi Server Component async yang memaka
 
 Tidak ada.
 
+
+
+\## US-03 Pesan via WhatsApp
+
+
+
+\*\*Prompt:\*\*
+
+Baca docs/rancangan-teknis.md bagian "Pesan WhatsApp (US-03)". Ubah components/TombolWhatsApp.jsx menjadi tautan yang membuka https://wa.me/ ke nomor di lib/toko.js, dengan pesan otomatis berisi nama dan harga produk dalam format rupiah. Pesan di-encode dengan encodeURIComponent dan dibuka di tab baru. Pertahankan tampilan tombolnya. Hapus CatatanBelumAktif yang menyebut US-03 di halaman detail produk.
+
+
+
+\*\*Hasil:\*\*
+
+AI mengubah TombolWhatsApp dari <button> menjadi <a> ke https://wa.me/<nomor>?text=<pesan>, memakai toko.nomorWhatsApp, formatRupiah, encodeURIComponent, target="\_blank" dan rel="noopener noreferrer". Diuji: WhatsApp terbuka ke nomor toko dengan pesan lengkap, termasuk karakter "\&" pada nama produk.
+
+
+
+\*\*Perbaikan:\*\*
+
+Tidak ada.
+
