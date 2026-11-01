@@ -74,7 +74,7 @@ Urutan yang disarankan: US-01, US-02, US-03, US-04, US-05, US-06, lalu fitur bon
 
 ## Tentang aplikasi ini
 
-- **Nama usaha:**
-- **Pembuat:**
-- **Link aplikasi:**
-- **Fitur bonus yang dikerjakan:**
+- **Nama usaha:** Crypto Lab — workshop analisis dan manajemen risiko aset kripto untuk profesional
+- **Pembuat:** Ikin Solihin
+- **Link aplikasi:** https://katalog-ikin.vercel.app
+- **Fitur bonus yang dikerjakan:** K-9 (pesan error tidak membocorkan detail teknis); proteksi berlapis proxy.js + cek login di Server Action
