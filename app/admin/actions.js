@@ -3,6 +3,35 @@
 import { redirect } from "next/navigation";
 import { buatSupabaseSesiAdmin } from "@/lib/supabase/server";
 
+async function pastikanAdminLogin() {
+  let supabase;
+  try {
+    supabase = await buatSupabaseSesiAdmin();
+  } catch {
+    return {
+      supabase: null,
+      user: null,
+      error:
+        "Gagal terhubung ke server autentikasi. Pastikan SUPABASE_URL dan SUPABASE_PUBLISHABLE_KEY sudah diisi di environment variable.",
+    };
+  }
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      supabase: null,
+      user: null,
+      error: "Sesi login tidak ditemukan. Silakan masuk kembali terlebih dahulu.",
+    };
+  }
+
+  return { supabase, user, error: null };
+}
+
 export async function masukAdmin(stateSebelumnya, formData) {
   const data = formData instanceof FormData ? formData : stateSebelumnya;
   const email = String(data?.get("email") ?? "").trim();
@@ -50,30 +79,14 @@ export async function keluarAdmin() {
 }
 
 export async function gantiPasswordAdmin(stateSebelumnya, formData) {
+  const { supabase, error: errorLogin } = await pastikanAdminLogin();
+  if (errorLogin) {
+    return { error: errorLogin };
+  }
+
   const data = formData instanceof FormData ? formData : stateSebelumnya;
   const passwordBaru = String(data?.get("password_baru") ?? "");
   const konfirmasiPassword = String(data?.get("konfirmasi_password") ?? "");
-
-  let supabase;
-  try {
-    supabase = await buatSupabaseSesiAdmin();
-  } catch {
-    return {
-      error:
-        "Gagal terhubung ke server autentikasi. Pastikan SUPABASE_URL dan SUPABASE_PUBLISHABLE_KEY sudah diisi di environment variable.",
-    };
-  }
-
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError || !user) {
-    return {
-      error: "Sesi login tidak ditemukan. Silakan masuk kembali terlebih dahulu.",
-    };
-  }
 
   if (passwordBaru.length < 8) {
     return {

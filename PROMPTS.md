@@ -108,3 +108,25 @@ Tidak ada. Catatan: karena localhost dan Vercel memakai project Supabase yang sa
 
 
 
+\## US-06 Proteksi halaman admin
+
+
+
+\*\*Prompt:\*\*
+
+Baca AGENTS.md aturan keamanan nomor 3 dan 4, dan docs/user-stories.md bagian US-06. Buat file proxy.js di root proyek (Next.js 16). Semua rute /admin kecuali /admin/login wajib login dengan Supabase Auth; kalau belum login, alihkan ke /admin/login. Pastikan juga setiap Server Action yang mengubah data memeriksa login di server. Hapus CatatanBelumAktif dari halaman /admin.
+
+
+
+\*\*Hasil:\*\*
+
+AI membuat proxy.js di root dengan matcher /admin dan /admin/:path\*, mengecualikan /admin/login, memverifikasi sesi dengan supabase.auth.getUser(), dan mengalihkan ke /admin/login jika belum login (fail-closed jika env tidak ada). AI juga menambahkan helper pastikanAdminLogin() yang dipanggil di awal gantiPasswordAdmin sebagai proteksi berlapis. Diuji di jendela incognito: /admin, /admin/password, dan /admin/produk/baru dialihkan ke login; /admin/login dan katalog publik tetap terbuka.
+
+
+
+\*\*Perbaikan:\*\*
+
+Tidak ada. Catatan: proteksi dibuat berlapis (proxy + cek di Server Action) karena proxy/middleware saja tidak cukup, contohnya CVE-2025-29927.
+
+
+
